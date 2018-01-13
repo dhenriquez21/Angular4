@@ -7,6 +7,7 @@ import { Observable } from 'rxjs/Observable';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
+
 export class AppComponent {
   
   ////VARIABLES///
@@ -18,22 +19,27 @@ export class AppComponent {
   editarsh:boolean=false;
   json:object = {id:null};
   list:Array<object>=[];
-  grilla: Observable<any[]>;
+  grilla: any;
 
 
   ////FUNCIONES///
   constructor(public afDB: AngularFireDatabase) {
-      this.readall();    
+      this.readall();          
   }
 
   readall(){
     this.grilla=this.afDB.list('persona').valueChanges();
+    localStorage.setItem('PRUEBA',JSON.stringify(this.grilla)); 
+    //localStorage.setItem('key',JSON.stringify(this.grilla)); 
+    //localStorage.setItem('grilla',JSON.stringify(this.grilla)); 
+    //window.localStorage.addItem("someKey", "someValue");   
   }
   createpersona(){
     this.afDB.database.ref('persona/'+this.json["codigo"]).set(this.json);
     this.readall();
     this.json={};
     this.showform=false;
+    localStorage.setItem('PRUEBA',JSON.stringify(this.grilla["codigo"])); 
   }
   addpersona(){
     this.showform=true;
@@ -47,12 +53,11 @@ export class AppComponent {
   
   }
   eliminar(x){
-    
     this.afDB.database.ref('persona/'+x["codigo"]).remove();
     this.readall();
+    //localStorage.setItem('grilla',JSON.parse(this.grilla)); 
   }
-  read(x){
-    console.log(x);
+  read(x){    
     this.json=x;
     this.showform=true;
     this.crearsh=false;
@@ -63,6 +68,7 @@ export class AppComponent {
     this.readall();
     this.json={};
     this.showform=false;
+    //localStorage.setItem('grilla',JSON.parse(this.grilla)); 
   }
   // update(){
   //   this.json={};    
